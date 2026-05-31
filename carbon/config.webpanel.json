@@ -1,0 +1,38 @@
+{
+  "Enabled": false,
+  "Panel": {
+    "MapImageScale": 1.0
+  },
+  "BridgeServer": {
+    "Ip": "localhost",
+    "Port": 0,
+    "MaxConnections": 500,
+    "MaxConnectionsPerIp": 5
+  },
+  "WebAccounts": [
+    {
+      "Name": "owner",
+      "Password": "ijag1vQ",
+      "Permissions": {
+        "console_view": true,
+        "console_input": true,
+        "chat_view": true,
+        "chat_input": true,
+        "players_view": true,
+        "players_ip": true,
+        "players_inventory": true,
+        "entities_view": true,
+        "entities_edit": true,
+        "permissions_view": true,
+        "permissions_edit": true,
+        "profiler_view": true,
+        "profiler_load": true,
+        "profiler_edit": true,
+        "plugins_view": true,
+        "plugins_edit": true,
+        "map_view": true,
+        "map_entities": true
+      }
+    }
+  ]
+}

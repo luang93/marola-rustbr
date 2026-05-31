@@ -1,0 +1,7 @@
+{
+  "Enabled": true,
+  "Config": {
+    "TimeoutPerUrl": 2.0
+  },
+  "Version": "4165859787"
+}

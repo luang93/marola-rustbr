@@ -1,0 +1,50 @@
+# Ignore the full game/server installation and runtime data by default.
+*
+
+# Keep repository metadata and docs.
+!.gitignore
+!*.md
+
+# Keep helper scripts and project files at the root.
+!carbon.sh
+!runds.sh
+!Carbon.targets
+
+# Keep Carbon configuration and custom content.
+!carbon/
+carbon/*
+!carbon/config.json
+!carbon/config.auto.json
+!carbon/config.profiler.json
+!carbon/config.webpanel.json
+!carbon/configs/
+!carbon/configs/**
+!carbon/lang/
+!carbon/lang/**
+!carbon/modules/
+!carbon/modules/**
+!carbon/plugins/
+!carbon/plugins/**
+
+# Ignore generated/runtime Carbon data.
+carbon/data/
+carbon/logs/
+carbon/managed/
+carbon/modules/**/data.json
+carbon/modules/**/data.db
+carbon/native/
+carbon/temp/
+
+# Ignore server runtime data, maps, backups, downloads and binaries.
+Bundles/
+RustDedicated*
+RustDedicated_Data/
+HarmonyMods/
+steamapps/
+server/
+cfg/
+backups/
+*.log
+*.so
+*.zip
+steam_appid.txt
