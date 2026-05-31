@@ -1,70 +1,70 @@
-# MarolaPets System Guide
+# Guia do Sistema MarolaPets
 
-## Purpose
-This document is the dedicated functional guide for the `MarolaPets` system.
+## Objetivo
+Este documento e o guia funcional dedicado ao sistema `MarolaPets`.
 
-It is meant to explain, in one place, what the pet system does, how players interact with it, how the runtime behaves, which files matter, and what engineering and operations should expect from the current implementation.
+Ele explica, em um unico lugar, o que o sistema de pet faz, como os jogadores interagem com ele, como o runtime se comporta, quais arquivos importam e o que engenharia e operacao devem esperar da implementacao atual.
 
-For lower-level engineering detail, see:
+Para detalhes mais profundos de engenharia, consulte:
 - `docs/MarolaPets_ENGINEERING.md`
 - `docs/MarolaPets_AUDIT.md`
 
-## System Summary
-`MarolaPets` is a custom Carbon/Oxide plugin that turns Rust NPC animals into player-owned companion pets.
+## Resumo do Sistema
+`MarolaPets` e um plugin customizado Carbon/Oxide que transforma animais NPC do Rust em companions controlados pelo jogador.
 
-The system currently includes:
-- pet spawn and dismissal
-- follow, stay, guard, and recall states
-- manual attack orders based on mouse aim
-- aggressive behavior with ally protection
-- 3D floating identification over the pet
-- 3D target preview while aiming
-- pet bag and item storage
-- food and water consumption from bag or from dropped items on the ground
-- progression in speed, attack, defense, and vitality
-- runtime and debug commands for support and balancing
+O sistema atualmente inclui:
+- spawn e dismiss de pets
+- estados de follow, stay, guard e recall
+- ordem manual de ataque baseada na mira do mouse
+- comportamento agressivo com protecao a aliados
+- identificacao 3D flutuante sobre o pet
+- preview 3D de alvo ao mirar
+- bag do pet e armazenamento de itens
+- consumo de comida e agua da mochila ou de itens dropados no chao
+- progressao em velocidade, ataque, defesa e vitalidade
+- comandos de runtime e debug para suporte e balanceamento
 
-Main plugin file:
+Arquivo principal do plugin:
 - `carbon/plugins/MarolaPets.cs`
 
-## Player Experience
-### What the player sees
-The current in-world HUD over the pet is intentionally minimal:
-- `Name | Lv X`
+## Experiencia do Jogador
+### O que o jogador ve
+O HUD atual em cima do pet foi reduzido de forma intencional para:
+- `Nome | Lv X`
 
-Detailed stats no longer stay floating above the mob. They are now shown through:
+Os status detalhados nao ficam mais flutuando sobre o mob. Agora eles aparecem por:
 - `/pet status`
 
-When the player aims at something and prepares an attack order, the system can show:
-- a red `ALVO: {name}` text on the selected target
-- a red line from the player view to the target
+Quando o jogador mira em algo e prepara uma ordem de ataque, o sistema pode mostrar:
+- um texto vermelho `ALVO: {nome}` no alvo selecionado
+- uma linha vermelha da visao do jogador ate o alvo
 
-### Main gameplay loop
-A typical player loop is:
-1. spawn a pet
-2. make it follow, stay, or guard
-3. use it defensively or aggressively
-4. feed it from dropped food/water or use a pet bag
-5. improve its level over time
-6. inspect the current state with `/pet status`, `/pet debug`, or `/pet diagnose`
+### Loop principal de gameplay
+Um fluxo tipico do jogador e:
+1. spawnar um pet
+2. colocar o pet em follow, stay ou guard
+3. usar o pet de forma defensiva ou agressiva
+4. alimentar por comida/agua dropada ou usar a bag do pet
+5. evoluir o level ao longo do tempo
+6. inspecionar o estado atual com `/pet status`, `/pet debug` ou `/pet diagnose`
 
-## Files That Matter
-Core files:
+## Arquivos Importantes
+Arquivos centrais:
 - `carbon/plugins/MarolaPets.cs`
 - `carbon/configs/MarolaPets.json`
 - `carbon/lang/en/MarolaPets.json`
 
-Supporting docs:
+Documentos de apoio:
 - `docs/MarolaPets_ENGINEERING.md`
 - `docs/MarolaPets_AUDIT.md`
 
-Runtime validation source:
+Fonte de validacao em runtime:
 - `carbon/logs/Carbon.Core.log`
 
-## Commands
-All interactions are routed through `/pet`.
+## Comandos
+Toda a interacao passa pelo comando `/pet`.
 
-### Basic commands
+### Comandos basicos
 - `/pet help`
 - `/pet spawn [tipo]`
 - `/pet dismiss`
@@ -73,31 +73,31 @@ All interactions are routed through `/pet`.
 - `/pet diagnose`
 - `/pet debug`
 
-### Control mode commands
+### Comandos de controle
 - `/pet follow`
 - `/pet stay`
 - `/pet guard`
 - `/pet radius <5|10|20>`
 
-### Combat commands
+### Comandos de combate
 - `/pet attack`
 - `/pet passive`
 - `/pet aggressive`
 
-### Ally commands
+### Comandos de aliados
 - `/pet ally add [nome]`
 - `/pet ally remove [nome]`
 - `/pet ally list`
 
-### Bag commands
+### Comandos da bag
 - `/pet bag equip`
 - `/pet bag remove`
 - `/pet bag add [qtd]`
 - `/pet bag take <item> [qtd]`
 - `/pet bag ui`
 
-## Supported Pets
-The code currently registers aliases for these pet types:
+## Pets Suportados
+O codigo atualmente registra aliases para estes tipos de pet:
 - wolf, lobo
 - bear, urso
 - polarbear, ursopolar, urso-polar
@@ -107,157 +107,157 @@ The code currently registers aliases for these pet types:
 - tiger, tigre
 - crocodile, crocodilo, jacare
 
-Important operational note:
-- some aliases are registered in code but still need runtime prefab validation
-- tiger and crocodile-related entries have already shown spawn failures in runtime logs during previous validation rounds
+Observacao operacional importante:
+- alguns aliases estao registrados no codigo, mas ainda precisam de validacao real de prefab em runtime
+- entradas ligadas a tigre e crocodilo/jacare ja mostraram falha de spawn em validacoes anteriores no log
 
-From a product point of view, only pets that successfully spawn in runtime should be considered truly supported.
+Do ponto de vista de produto, so devem ser considerados realmente suportados os pets que spawnam com sucesso em runtime.
 
-## Behavior Model
+## Modelo de Comportamento
 ### Follow
-The pet follows the owner using rotating offsets instead of standing directly on top of the player.
+O pet segue o dono usando offsets rotativos em vez de ficar colado no player.
 
-This improves:
-- readability
-- collision feel
-- perceived natural movement
+Isso melhora:
+- legibilidade
+- sensacao de colisao
+- percepcao de movimento natural
 
 ### Stay
-The pet remains in place and stops trying to follow the owner.
+O pet fica parado e deixa de tentar seguir o dono.
 
 ### Guard
-The pet stores a guard anchor and tries to remain within the configured radius.
+O pet armazena uma ancora de guarda e tenta permanecer dentro do raio configurado.
 
-Allowed guard radii today:
+Raios de guarda permitidos hoje:
 - `5`
 - `10`
 - `20`
 
 ### Recall
-If the pet is too far away or lost, recall teleports it safely near the owner, subject to cooldown and recovery rules.
+Se o pet ficar longe demais ou se perder, o recall o teleporta com seguranca para perto do dono, respeitando cooldown e regras de recovery.
 
-## Combat Model
-### Manual attack
-`/pet attack` uses the entity under the player aim.
+## Modelo de Combate
+### Ataque manual
+`/pet attack` usa a entidade que esta sob a mira do jogador.
 
-Target acquisition is not just a simple center hit check. It combines:
-- direct ray hit detection
-- aim-cone style scoring for nearby entities
-- exclusion rules for friendly targets and pet-owned entities
+A aquisicao de alvo nao depende apenas de um hit central simples. Ela combina:
+- deteccao de hit direto no raycast
+- score por cone de mira para entidades proximas
+- regras de exclusao para alvos friendly e entidades que sao pets
 
-### Aggressive mode
-In aggressive mode, the pet can auto-acquire nearby hostile players.
+### Modo agressivo
+No modo agressivo, o pet pode adquirir automaticamente players hostis proximos.
 
-This is narrower than the full manual targeting path. Manual targeting can work with a broader `BaseCombatEntity` surface, while aggressive auto-acquisition currently focuses on hostile players.
+Esse caminho e mais estreito que o caminho manual completo. O targeting manual pode trabalhar com um conjunto mais amplo de `BaseCombatEntity`, enquanto a aquisicao automatica agressiva hoje foca em players hostis.
 
-### Friendly protection
-The pet should not attack:
-- its owner
-- allied players
-- pets owned by the owner or by allies
+### Protecao a friendly
+O pet nao deve atacar:
+- o proprio dono
+- players aliados
+- pets do dono ou de aliados
 
-### Combat limits
-Combat behavior is bounded by:
+### Limites de combate
+O comportamento de combate e limitado por:
 - activation range
 - target commit time
 - leash distance
 - engage distance
-- cooldown between hits
+- cooldown entre golpes
 
-## HUD and Status
-### In-world HUD
-The floating HUD is deliberately minimal:
-- pet display name
-- aggregate level
+## HUD e Status
+### HUD em mundo
+O HUD flutuante foi reduzido de forma intencional para:
+- nome exibido do pet
+- level agregado
 
-Reason:
-- large multiline `ddraw.text` blocks were visually poor and unstable in practice
-- detailed numbers now live in chat where they are easier to read and maintain
+Motivo:
+- blocos grandes e multiline de `ddraw.text` ficaram visualmente ruins e instaveis na pratica
+- os numeros detalhados agora vivem no chat, onde sao mais legiveis e mais simples de manter
 
 ### `/pet status`
-`/pet status` is now the main stats surface.
+`/pet status` agora e a principal superficie de status do sistema.
 
-It reports:
-- pet name and aggregate level
-- current hunger and hunger capacity
-- current thirst and thirst capacity
-- current effective run speed and sprint speed
-- current effective damage
-- current effective attack cadence
-- current defense level and reduction
+Ele mostra:
+- nome do pet e level agregado
+- fome atual e capacidade de fome
+- sede atual e capacidade de sede
+- velocidade efetiva de corrida e sprint
+- dano efetivo atual
+- cadencia efetiva de ataque
+- nivel e reducao de defesa
 
-## Progression Model
-The pet has four tracked training dimensions.
+## Modelo de Progressao
+O pet possui quatro trilhas de treino.
 
-### Speed
-How it levels:
-- gains XP from movement distance
+### Velocidade
+Como evolui:
+- ganha XP por distancia percorrida
 
-What it changes:
-- effective movement speed
-- follow/run/sprint responsiveness
+O que altera:
+- velocidade efetiva de movimento
+- resposta de follow, run e sprint
 
-### Attack
-How it levels:
-- gains XP from successful attacks
+### Ataque
+Como evolui:
+- ganha XP por ataques bem-sucedidos
 
-What it changes:
-- damage
-- hit cadence
+O que altera:
+- dano
+- cadencia de golpes
 
-### Defense
-How it levels:
-- gains XP from damage received
+### Defesa
+Como evolui:
+- ganha XP por dano recebido
 
-What it changes:
-- incoming damage reduction
+O que altera:
+- reducao de dano de entrada
 
-### Vitality
-How it levels:
-- gains XP from survival time over updates
+### Vitalidade
+Como evolui:
+- ganha XP por tempo de sobrevivencia nas atualizacoes
 
-What it changes:
-- hunger capacity
-- thirst capacity
+O que altera:
+- capacidade de fome
+- capacidade de sede
 
-### Aggregate level
-The level shown above the pet is not a separate XP bar.
+### Level agregado
+O level mostrado acima do pet nao e uma barra de XP separada.
 
-It is an aggregate display built from the sum of the positive deltas of:
+Ele e um level de exibicao agregado, construido pela soma dos deltas positivos de:
 - speed level
 - attack level
 - defense level
 - vitality level
 
-## Hunger, Thirst, and Feeding
-The system tracks two long-lived resource pools:
-- hunger
-- thirst
+## Fome, Sede e Alimentacao
+O sistema rastreia dois reservatorios de longo prazo:
+- fome
+- sede
 
-Implementation note:
-- internally, thirst still uses the `Stamina` field name in code
-- user-facing messaging now treats it as thirst/energy
+Observacao de implementacao:
+- internamente, a sede ainda usa o campo `Stamina` no codigo
+- no texto para o jogador, esse valor passou a ser tratado como sede/energia
 
-### Resource drain
-Over time the pet loses:
-- hunger passively
-- thirst passively
-- additional thirst while moving
-- additional thirst when attacking
+### Dreno de recursos
+Com o tempo o pet perde:
+- fome passivamente
+- sede passivamente
+- sede adicional ao se mover
+- sede adicional ao atacar
 
-### Feeding sources
-The pet can recover resources from:
-- configured items inside the pet bag
-- dropped items found on the ground near the pet
+### Fontes de alimentacao
+O pet pode recuperar recursos de:
+- itens configurados dentro da bag do pet
+- itens dropados no chao perto do pet
 
-### Feed priority
-Ground feeding is checked before bag consumption.
+### Prioridade de consumo
+A alimentacao do chao e checada antes da bag.
 
-Effective order:
-1. nearby dropped food/water
-2. otherwise bag resources if the bag is equipped and thresholds are crossed
+Ordem efetiva:
+1. itens de comida/agua proximos no chao
+2. caso contrario, recursos da bag se ela estiver equipada e os thresholds forem atingidos
 
-This means the pet prefers nearby world resources before spending its stored supplies.
+Isso significa que o pet prefere consumir recursos do mundo antes de gastar o estoque guardado.
 
 ## Bag System
 ### Equip requirement
