@@ -5,43 +5,45 @@
 [![Plugins](https://img.shields.io/badge/Plugins-C%23%20Oxide%2FCarbon-0A66C2?style=for-the-badge&logo=csharp&logoColor=white)](./carbon/plugins)
 [![GitHub](https://img.shields.io/badge/GitHub-Versionado-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/luang93/marola-rustbr)
 
-Repositorio de configuracao e customizacao do servidor Rust modded com Carbon.
+Repositorio de configuracao, customizacao e documentacao tecnica do servidor Rust modded com Carbon.
 
-Este repositorio nao versiona a instalacao completa do servidor. O foco aqui e manter sob controle de versao apenas o que faz sentido para administracao, manutencao e recuperacao do ambiente.
+O objetivo deste repositório e versionar a camada que realmente importa para engenharia e operacao:
+- plugins customizados e de terceiros
+- configuracoes do Carbon e dos plugins
+- scripts de bootstrap e execucao
+- documentacao tecnica, operacional e de manutencao
 
-## Visao geral
+A instalacao completa do Rust Dedicated nao faz parte do escopo do Git.
 
-Este projeto serve como base de manutencao do servidor. Aqui ficam os plugins, configuracoes, idiomas e scripts operacionais que definem o comportamento do ambiente modded.
+## Escopo do repositorio
 
-Em vez de subir a instalacao completa do Rust Dedicated, o repositorio guarda so a camada que interessa para operacao e historico tecnico.
+Este projeto representa a camada de customizacao do servidor, nao um snapshot completo da instalacao.
 
-## O que este repositorio guarda
+Versionado aqui:
+- `carbon/plugins`
+- `carbon/configs`
+- `carbon/lang`
+- `carbon/modules`
+- arquivos `carbon/*.json`
+- scripts operacionais na raiz
+- documentacao em `docs/`
 
-- Plugins Carbon em `carbon/plugins`
-- Configuracoes dos plugins em `carbon/configs`
-- Configuracoes principais do Carbon em `carbon/*.json`
-- Arquivos de linguagem em `carbon/lang`
-- Configuracoes de modulos em `carbon/modules`
-- Scripts auxiliares na raiz, como `carbon.sh` e `runds.sh`
-- Documentacao operacional, como `GUIA_SCRIPTS_BASICOS_CARBON.md`
-
-## O que fica fora do Git
-
-Para evitar subir lixo operacional, binarios grandes ou dados sensiveis/temporarios, o `.gitignore` exclui por padrao:
-
-- Instalacao do Rust Dedicated e arquivos binarios grandes
-- Bundles e arquivos do jogo
-- Saves, mapas, bancos e dados de runtime do servidor
-- Logs
-- Dados gerados pelo Carbon em `carbon/data`, `carbon/logs` e `carbon/temp`
-
-Esse repositorio representa a camada de customizacao do servidor, nao o servidor completo.
+Fora do Git por padrao:
+- binarios do servidor e do jogo
+- bundles e artefatos grandes
+- saves, mapas e runtime state do jogo
+- logs e arquivos temporarios
+- diretorios gerados pelo Carbon, como `carbon/data`, `carbon/logs` e `carbon/temp`
 
 ## Estrutura principal
 
 ```text
 .
 ├── README.md
+├── docs/
+│   ├── MarolaPets_AUDIT.md
+│   ├── MarolaPets_ENGINEERING.md
+│   └── MarolaPets_SYSTEM.md
 ├── GUIA_SCRIPTS_BASICOS_CARBON.md
 ├── carbon.sh
 ├── runds.sh
@@ -57,51 +59,99 @@ Esse repositorio representa a camada de customizacao do servidor, nao o servidor
 └── .gitignore
 ```
 
-## Instalacao e preparo do ambiente
+## Documentacao disponivel
 
-Este repositorio nao instala o servidor sozinho. Ele deve ser usado em cima de um ambiente Rust + Carbon ja existente.
+Documentacao geral:
+- `README.md`: entrada principal do repositorio
+- `GUIA_SCRIPTS_BASICOS_CARBON.md`: guia rapido para criar scripts/plugins
 
-Pre requisitos praticos:
+Documentacao do sistema de pet:
+- `docs/MarolaPets_SYSTEM.md`: visao funcional completa do sistema de pet
+- `docs/MarolaPets_ENGINEERING.md`: documentacao tecnica para engenharia
+- `docs/MarolaPets_AUDIT.md`: auditoria tecnica, riscos e recomendacoes
 
-- servidor Rust Dedicated ja instalado
-- Carbon ja presente no ambiente
+## MarolaPets
+
+O `MarolaPets` e o principal plugin customizado atual do servidor.
+
+Arquivo principal:
+- `carbon/plugins/MarolaPets.cs`
+
+Capacidades principais do sistema:
+- spawn de pets com aliases em PT-BR e EN
+- follow, stay, guard, recall e ataque manual por mira do mouse
+- modo agressivo com protecao contra aliados
+- HUD 3D minimalista com nome e level
+- preview 3D do alvo de ataque
+- bag do pet com item-gate via `horse.saddlebag`
+- consumo automatico de comida e agua da mochila ou do chao
+- progressao por velocidade, ataque, defesa e vitalidade
+- status detalhado via `/pet status`
+
+Arquivos relacionados:
+- `carbon/plugins/MarolaPets.cs`
+- `carbon/configs/MarolaPets.json`
+- `carbon/lang/en/MarolaPets.json`
+- `docs/MarolaPets_SYSTEM.md`
+- `docs/MarolaPets_ENGINEERING.md`
+- `docs/MarolaPets_AUDIT.md`
+
+Estado operacional importante:
+- a validacao real de reload do plugin deve ser feita em `carbon/logs/Carbon.Core.log`
+- alguns aliases cadastrados no codigo, como tigre e jacare/crocodilo, ainda precisam de validacao final de prefab em runtime
+
+## Preparacao do ambiente
+
+Este repositorio pressupoe um ambiente Rust Dedicated + Carbon ja existente.
+
+Pre-requisitos praticos:
+- Rust Dedicated instalado
+- Carbon instalado e funcional
 - Git instalado na maquina
-- acesso ao repositorio
+- acesso ao repositorio remoto
+- permissao para editar plugins/configs no ambiente do servidor
 
-Para clonar este projeto em uma maquina com o ambiente pronto:
+Clonagem basica:
 
 ```bash
 git clone https://github.com/luang93/marola-rustbr.git
 cd marola-rustbr
 ```
 
-Se a maquina ja tiver uma pasta do servidor pronta, o uso normal e atualizar os arquivos versionados dentro dela e manter fora do Git os binarios, saves e dados de runtime.
-
-## Operacao diaria
-
-Fluxo pratico para o dia a dia deste servidor:
-
-### 1. Entrar na pasta do projeto
+No ambiente atual de operacao:
 
 ```bash
 cd /home/rustserver/rustserver
 ```
 
-### 2. Ver o que mudou
+## Operacao diaria
+
+Fluxo recomendado:
+
+### 1. Verificar estado atual
 
 ```bash
 git status
 ```
 
-### 3. Atualizar do GitHub antes de editar
+### 2. Atualizar antes de editar
 
 ```bash
 git pull
 ```
 
-### 4. Iniciar o servidor
+### 3. Editar a camada versionada
 
-Os scripts presentes na raiz indicam duas formas basicas de execucao:
+Areas mais comuns:
+- `carbon/plugins` para plugins `.cs`
+- `carbon/configs` para configuracoes de plugins
+- `carbon/lang` para mensagens e traducoes
+- `carbon/modules` para modulos do Carbon
+- `docs` para material tecnico e operacional
+
+### 4. Iniciar ou reiniciar o servidor
+
+Scripts mais usados:
 
 ```bash
 ./carbon.sh
@@ -113,66 +163,28 @@ ou
 ./runds.sh
 ```
 
-Resumo rapido:
+Resumo:
+- `carbon.sh`: inicializa o ambiente do Carbon e repassa os argumentos para o `RustDedicated`
+- `runds.sh`: exporta bibliotecas e executa o `RustDedicated` em modo batch
 
-- `carbon.sh` inicializa o ambiente do Carbon e repassa os argumentos para o `RustDedicated`
-- `runds.sh` exporta bibliotecas e executa o `RustDedicated` em modo batch
+### 5. Validar o comportamento
 
-### 5. Editar configuracoes ou plugins
+Para plugins Carbon/Oxide, sempre validar em dois niveis:
+- nivel editor: sintaxe e estrutura do arquivo
+- nivel runtime: `carbon/logs/Carbon.Core.log`
 
-Areas mais comuns:
-
-- `carbon/plugins` para plugins `.cs`
-- `carbon/configs` para configuracoes dos plugins
-- `carbon/lang` para mensagens e traducoes
-- `carbon/modules` para configuracoes de modulos do Carbon
-
-### 6. Salvar e validar no servidor
-
-Como os watchers de script estao ativos neste ambiente, alteracoes em plugins normalmente sao detectadas automaticamente.
-
-Quando precisar controlar manualmente, use os comandos do Carbon listados abaixo.
-
-### 7. Versionar alteracoes
+### 6. Versionar alteracoes
 
 ```bash
-git add .
+git status
+git add <arquivos>
 git commit -m "Describe the change"
 git push
 ```
 
-## Plugins atuais versionados
-
-Atualmente o repositorio acompanha estes plugins principais:
-
-- Backpacks
-- BetterLoot
-- Clans
-- CopyPaste
-- ImageLibrary
-- Kits
-- NTeleportation
-- RaidableBases
-- Skins
-- XPerience
-
-## Guia para criar scripts
-
-Existe um guia separado com exemplos basicos de plugin para este ambiente:
-
-- `GUIA_SCRIPTS_BASICOS_CARBON.md`
-
-Esse guia explica:
-
-- Onde criar plugins
-- Estrutura minima de um plugin Carbon/Oxide
-- Exemplo com comando simples
-- Uso de permissoes
-- Fluxo seguro para testar sem baguncar o servidor
-
 ## Comandos uteis do Carbon
 
-Este ambiente ja possui aliases configurados em `carbon/config.json`.
+Este ambiente possui aliases configurados em `carbon/config.json`.
 
 Aliases disponiveis:
 
@@ -195,14 +207,13 @@ c.unload NomeDoPlugin
 ```
 
 Uso pratico:
-
 - `c.version`: mostra a versao do Carbon
 - `c.plugins`: lista plugins carregados
 - `c.load NomeDoPlugin`: carrega um plugin manualmente
 - `c.reload NomeDoPlugin`: recarrega um plugin depois de editar
 - `c.unload NomeDoPlugin`: descarrega um plugin
 
-Como existe alias configurado, tambem da para usar:
+Tambem e possivel usar os aliases curtos:
 
 ```text
 plugins
@@ -211,7 +222,9 @@ reload NomeDoPlugin
 unload NomeDoPlugin
 ```
 
-Para administracao de permissoes em plugins, alguns comandos comuns do ecossistema Oxide/Carbon sao:
+## Permissoes
+
+Para plugins Oxide/Carbon, comandos frequentes:
 
 ```text
 oxide.grant user STEAM_ID permissao.exemplo
@@ -221,29 +234,57 @@ oxide.show user STEAM_ID
 oxide.show group admin
 ```
 
-Esses comandos sao uteis quando um plugin depende de permissao para liberar funcoes ou comandos.
+No caso do MarolaPets, a permissao base e:
 
-## Fluxo de atualizacao com Git
+```text
+marolapets.use
+```
 
-Fluxo basico para atualizar este repositorio depois de alterar configs ou plugins:
+## Plugins e configuracoes versionados
+
+O repositorio versiona configuracao e/ou codigo para varios sistemas do servidor, incluindo exemplos como:
+- Backpacks
+- BetterLoot
+- Clans
+- CopyPaste
+- ImageLibrary
+- Kits
+- NTeleportation
+- RaidableBases
+- Skins
+- XPerience
+- MarolaPets
+
+## Boas praticas de engenharia
+
+- sempre revisar `git status` antes de commitar
+- nao subir logs, saves, bancos e artefatos de runtime
+- validar reload final em `carbon/logs/Carbon.Core.log`
+- preferir commits pequenos e focados por sistema
+- documentar decisoes de plugin customizado em `docs/`
+- separar mudancas do sistema de pet de alteracoes operacionais sem relacao
+
+## Fluxo recomendado para o sistema de pet
+
+Para alterar o `MarolaPets` com seguranca:
 
 ```bash
 cd /home/rustserver/rustserver
 git status
-git add .
-git commit -m "Describe the change"
-git push
+c.reload MarolaPets
 ```
 
-## Boas praticas
+Depois validar:
+- spawn do pet
+- follow/stay/guard
+- `/pet attack`
+- `/pet status`
+- bag e auto-feed
+- linhas finais de `carbon/logs/Carbon.Core.log`
 
-- Edite plugins novos separadamente antes de mexer nos plugins grandes ja instalados
-- Sempre faca `git pull` antes de iniciar uma rodada nova de alteracoes
-- Revise o `git status` antes de cada commit
-- Nao suba saves, logs, bancos ou dumps do servidor
-- Nao trate a pasta versionada como backup completo do servidor
-- Use este repositorio como historico de configuracao e codigo customizado
+## Observacoes finais
 
-## Observacao
+Se a estrutura do servidor mudar, revise o `.gitignore` e o `README` para manter o repositorio coerente com a camada realmente versionada.
 
-Se o servidor mudar muito de estrutura, revise o `.gitignore` para manter o repositorio limpo e evitar subir arquivos de runtime por acidente.
+Para leitura focada no pet, a entrada principal da equipe deve ser:
+- `docs/MarolaPets_SYSTEM.md`

@@ -1,0 +1,117 @@
+{
+  "Movement": {
+    "TickInterval": 0.35,
+    "IdleDistance": 3.0,
+    "WalkDistance": 8.0,
+    "RunDistance": 9.0,
+    "SprintDistance": 50.0,
+    "MinOwnerDistance": 2.0,
+    "SideOffset": 1.6,
+    "RearOffset": 2.6,
+    "DefaultGuardRadius": 10.0,
+    "StopDistance": 1.75,
+    "WalkSpeed": 2.5,
+    "RunSpeed": 4.4,
+    "SprintSpeed": 6.4,
+    "Acceleration": 8.0,
+    "Deceleration": 10.0,
+    "LostDistance": 22.0,
+    "OwnerMoveThreshold": 0.2,
+    "NetworkMinMoveDistance": 0.15,
+    "TurnSpeed": 180.0,
+    "OffsetRotateInterval": 2.75,
+    "LocalAvoidanceDistance": 1.35,
+    "PathRefreshDistance": 2.25
+  },
+  "Combat": {
+    "ActivationRange": 18.0,
+    "LeashDistance": 25.0,
+    "EngageDistance": 2.2,
+    "MoveSpeed": 5.25,
+    "Damage": 18.0,
+    "Cooldown": 1.1,
+    "TargetCommitTime": 4.0
+  },
+  "AiLod": {
+    "FullRange": 30.0,
+    "SimplifiedRange": 100.0,
+    "FullThinkInterval": 0.1,
+    "SimplifiedThinkInterval": 0.5,
+    "SleepingThinkInterval": 2.0
+  },
+  "NativeAi": {
+    "DisableBrain": true,
+    "DisableNavigator": true,
+    "ClearHostileTargets": true,
+    "ReapplyEveryThink": true
+  },
+  "Recall": {
+    "Cooldown": 8.0,
+    "SpawnOffset": 2.0
+  },
+  "Ui": {
+    "Enabled": true,
+    "DrawInterval": 1.0,
+    "CompactDistance": 20.0,
+    "MaxOwnerDistance": 35.0,
+    "VerticalOffset": 1.9
+  },
+  "Training": {
+    "HungerDrainPerMinute": 1.5,
+    "ThirstDrainPerMinute": 1.2,
+    "StaminaDrainMovePerSecond": 3.5,
+    "StaminaDrainAttack": 8.0,
+    "LowHungerThreshold": 25.0,
+    "SpeedXpPerMeter": 0.55,
+    "SpeedXpPerLevel": 180.0,
+    "SpeedBonusPerLevel": 0.05,
+    "AttackXpPerHit": 18.0,
+    "AttackXpPerLevel": 140.0,
+    "AttackBonusPerLevel": 0.08,
+    "AttackSpeedBonusPerLevel": 0.03,
+    "DefenseXpPerDamage": 1.35,
+    "DefenseXpPerLevel": 160.0,
+    "DefenseBonusPerLevel": 0.045,
+    "VitalityXpPerMinute": 1.2,
+    "VitalityXpPerLevel": 120.0,
+    "CapacityBonusPerLevel": 12.0
+  },
+  "Inventory": {
+    "Capacity": 8,
+    "AutoConsumeCooldown": 8.0,
+    "AutoEatThreshold": 55.0,
+    "AutoDrinkThreshold": 30.0,
+    "GroundFeedRadius": 2.5,
+    "FoodRestore": {
+      "apple": 12.0,
+      "black.raspberries": 8.0,
+      "blueberries": 8.0,
+      "can.beans": 24.0,
+      "can.tuna": 18.0,
+      "chicken.cooked": 22.0,
+      "corn": 10.0,
+      "fish.cooked": 24.0,
+      "granolabar": 14.0,
+      "humanmeat.cooked": 16.0,
+      "mushroom": 8.0,
+      "pork.cooked": 24.0,
+      "pumpkin": 14.0,
+      "granola.bar": 14.0
+    },
+    "WaterRestore": {
+      "smallwaterbottle": 18.0,
+      "waterjug": 35.0,
+      "water": 18.0,
+      "water.salt": 4.0
+    }
+  },
+  "Recovery": {
+    "StuckDeltaThreshold": 0.2,
+    "StuckDuration": 2.5,
+    "LateralRepositionDistance": 2.5,
+    "SafeTeleportDistance": 50.0,
+    "NearbyEnemyRange": 12.0,
+    "CombatBlockDuration": 10.0,
+    "RetryCooldown": 0.75
+  }
+}

@@ -4,6 +4,8 @@
 # Keep repository metadata and docs.
 !.gitignore
 !*.md
+!docs/
+!docs/**
 
 # Keep helper scripts and project files at the root.
 !carbon.sh
