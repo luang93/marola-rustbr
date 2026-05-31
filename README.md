@@ -1,5 +1,10 @@
 # marola-rustbr
 
+[![Rust Server](https://img.shields.io/badge/Rust-Dedicated%20Server-CE422B?style=for-the-badge&logo=rust&logoColor=white)](https://rust.facepunch.com/)
+[![Carbon](https://img.shields.io/badge/Carbon-Modding%20Framework-1F2937?style=for-the-badge)](https://carbonmod.gg/)
+[![Plugins](https://img.shields.io/badge/Plugins-C%23%20Oxide%2FCarbon-0A66C2?style=for-the-badge&logo=csharp&logoColor=white)](./carbon/plugins)
+[![GitHub](https://img.shields.io/badge/GitHub-Versionado-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/luang93/marola-rustbr)
+
 Repositorio de configuracao e customizacao do servidor Rust modded com Carbon.
 
 Este repositorio nao versiona a instalacao completa do servidor. O foco aqui e manter sob controle de versao apenas o que faz sentido para administracao, manutencao e recuperacao do ambiente.
